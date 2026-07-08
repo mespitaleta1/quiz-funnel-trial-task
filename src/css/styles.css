@@ -1,0 +1,14 @@
+body {
+    color: #252525;
+    background-image: linear-gradient(180deg,#f0ead3 0%,#ecf8ff 100.12%);
+    margin: 0px;
+}
+
+#root {
+    max-width: 1280px;
+    width: 100%;
+    height: 100vh;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+  }
