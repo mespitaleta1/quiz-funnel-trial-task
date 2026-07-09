@@ -1,7 +1,8 @@
 body {
-    color: #252525;
-    background-image: linear-gradient(180deg,#f0ead3 0%,#ecf8ff 100.12%);
     margin: 0px;
+    color: #252525;
+    font-family: 'DM sans';
+    background-image: linear-gradient(180deg,#f0ead3 0%,#ecf8ff 100.12%);
 }
 
 #root {
@@ -11,4 +12,73 @@ body {
     margin: 0 auto;
     padding: 2rem;
     text-align: center;
-  }
+}
+
+button {
+    color: #fff;
+    cursor: pointer;
+    border-radius: 8px;
+    background-color: #40a3b5;
+    border: 1px solid transparent;
+    padding:11.8px 47.8px;
+    height: 48px;
+    min-width: 250px;
+    max-height: 48px;
+    font-size: 19px;
+    font-weight: 500;
+}
+
+button :hover {
+    background-color: #4D468CFF;
+}
+
+button :disabled {
+    background-color: lightgray;
+}
+
+.quiz-navigation {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+    align-items: center;
+}
+
+li {
+    cursor: pointer;
+}
+
+.progress {
+    width: 100%;
+    height: 10px;
+    background-color: #e5e5e5;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: #40a3b5;
+    transition: width .3s ease;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    margin: 0 auto;
+    gap: 10px;
+    text-align: left;
+}
+
+form button {
+    margin-top: 20px;
+}

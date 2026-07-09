@@ -1,1 +1,3 @@
-console.log("JS MODULE!")
+import { render } from "./render.js";
+
+render();
