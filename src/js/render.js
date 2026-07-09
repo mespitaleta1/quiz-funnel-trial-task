@@ -1,5 +1,7 @@
 import { state } from "./state.js";
 import { questions } from "./questions.js";
+import { validateForm } from "./validations.js"
+import { STARS_ICON, GOLD_STARS_ICON, RIGHT_CHEVRON, LEFT_CHEVRON } from "../assets/icon.js"
 
 //console.log('%cQUIZ FUNNEL', 'background-color: blue; color: white; font-style: italic; border-radius: 5px;padding: 2px', state);
 
@@ -17,7 +19,7 @@ function renderWelcome (){
     return `
     <div class="start-quiz-section">
         <h1>Discover which is your Ledisa product!</h1>
-        <p>This quiz will takes less than 5 minutes</p>
+        <p class="start-quiz-description">This quiz will takes less than 5 minutes.</p>
         <button class="start-quiz" type="button"> Start Quiz Now </button>
     </div>
     `;
@@ -32,6 +34,7 @@ function renderProgressBar() {
                 class="progress-fill"
                 style="width:${progress}%">
             </div>
+            ${progress === 100 ? GOLD_STARS_ICON : STARS_ICON}
         </div>
     `;
 }
@@ -43,8 +46,8 @@ function renderQuiz() {
         <p>Question ${state.currentStep + 1} of ${ questions.length }</p>
         ${renderQuestion()}
         <div class="quiz-navigation">
-            <button class="prev-quiz-question" type="button" ${state.currentStep === 0 ? 'disabled': ''}> Back </button>
-            <button class="next-quiz-question" type="button"> Next </button>
+            <button class="prev-quiz-question" type="button" ${state.currentStep === 0 ? 'disabled': ''}> ${LEFT_CHEVRON}  </button>
+            <button class="next-quiz-question" type="button"> ${RIGHT_CHEVRON} </button>
         </div>
     </div>`;
 }
@@ -55,15 +58,24 @@ function renderContactForm() {
      <p> Complete your details and we'll send your personalized recommendation. </p>
 
      <div>
-        <form method="post" class="">
-            <label for="name"> First name </label>
-            <input id="name" type="text" name="name" required>
+        <form id="contact-form" novalidate>
+            <div>
+                <label for="name"> First name </label>
+                <input type="text" id="name" name="firstName" required minlength="2" maxlength="50" placeholder="e.g. John Doe">
+                <span id="name-error" class="error-msg"></span>
+            </div>
 
-            <label for="email"> Email </label>
-            <input type="email" id="email" size="30" required placeholder="email@gmail.com">
+            <div>
+                <label for="email"> Email </label>
+                <input type="email" id="email" name="email" size="30" required placeholder="email@gmail.com">
+                <span id="email-error" class="error-msg"></span>
+            </div>
 
-            <label for="phone"> Phone number </label>
-            <input type="tel" id="phone" placeholder="+57 300 123 4567" required >
+            <div>
+                <label for="phone"> Phone number </label>
+                <input type="tel" id="phone" name="phone" placeholder="+57 300 123 4567" required >
+                <span id="phone-error" class="error-msg"></span>
+            </div>
 
             <button class="submit-contact" type="submit"> Get my Recommendation </button>
         </form>
@@ -95,10 +107,20 @@ function nextQuestion() {
 
 function submitForm(event) {
     event.preventDefault();
-    console.log("GTM");
-    console.log("Enviar a Klaviyo");
-    window.location.href = "https://ledisa.com/products/glp-1";
+    const form = event.target;
+    const formData = new FormData(form);
+    const data = {
+        firstName: formData.get("firstName").trim(),
+        email: formData.get("email").trim(),
+        phone: formData.get("phone").trim(),
+    };
 
+    const isValid = validateForm(data);
+    if (!isValid) return;
+
+    console.log(data);
+    state.contact = data;
+    //window.location.href = "https://ledisa.com/products/glp-1";
 }
 
 function attachEvents(root) {
@@ -110,7 +132,7 @@ function attachEvents(root) {
     startQuizBtn?.addEventListener("click", startQuiz);
     prevQuestionBtn?.addEventListener("click", previousQuestion);
     nextQuestionBtn?.addEventListener("click", nextQuestion);
-    form?.addEventListener("submit", submitForm());
+    form?.addEventListener("submit", (e) => submitForm(e));
 }
 
 export function render() {
