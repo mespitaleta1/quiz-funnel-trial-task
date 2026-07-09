@@ -82,6 +82,10 @@ li:hover {
     position: relative;
 }
 
+.quiz-option.selected{
+    color: #50c6dc;
+}
+
 .progress {
     width: 90%;
     height: 10px;

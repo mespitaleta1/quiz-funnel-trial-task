@@ -1,6 +1,7 @@
 import { state } from "./state.js";
 import { questions } from "./questions.js";
 import { validateForm } from "./validations.js"
+import { saveState, clearState } from "./storage.js"
 import { STARS_ICON, GOLD_STARS_ICON, RIGHT_CHEVRON, LEFT_CHEVRON } from "../assets/icon.js"
 
 //console.log('%cQUIZ FUNNEL', 'background-color: blue; color: white; font-style: italic; border-radius: 5px;padding: 2px', state);
@@ -8,7 +9,15 @@ import { STARS_ICON, GOLD_STARS_ICON, RIGHT_CHEVRON, LEFT_CHEVRON } from "../ass
 //Templates:
 function renderQuestion () {
     const currentQuestion = questions[state.currentStep];
-    const currentAnswers = currentQuestion.options.map(option => `<li>${option}</li>`).join("");
+    const selectedAnswer = state.answers[currentQuestion.id];
+    const currentAnswers = currentQuestion.options
+        .map(option => `
+            <li class="quiz-option ${option.value === selectedAnswer ? "selected" : ""}" data-answer="${option.value}">
+                ${option.label}
+            </li>
+        `)
+        .join("");
+
     return `
         <h2>${currentQuestion.title}</h2>
         <ul>${currentAnswers}</ul>
@@ -86,12 +95,22 @@ function renderContactForm() {
 //Template events:
 function startQuiz() {
     state.screen = "quiz";
+    saveState(state);;
     render();
+}
+
+function selectAnswer(event) {
+    const answer = event.currentTarget.dataset.answer;
+    const question = questions[state.currentStep];
+    state.answers[question.id] = answer;
+    saveState(state);
+    nextQuestion();
 }
 
 function previousQuestion() {
     if (state.currentStep === 0) return;
     state.currentStep--;
+    saveState(state);
     render();
 }
 
@@ -102,6 +121,7 @@ function nextQuestion() {
         return;
     }
     state.currentStep++;
+    saveState(state);
     render();
 }
 
@@ -118,18 +138,23 @@ function submitForm(event) {
     const isValid = validateForm(data);
     if (!isValid) return;
 
-    console.log(data);
     state.contact = data;
+    saveState(state);
+    console.log('%cQUIZ FUNNEL', 'background-color: blue; color: white; font-style: italic; border-radius: 5px;padding: 2px', state);
+    clearState();
     //window.location.href = "https://ledisa.com/products/glp-1";
+
 }
 
 function attachEvents(root) {
     const startQuizBtn = root.querySelector(".start-quiz");
+    const options = root.querySelectorAll(".quiz-option");
     const prevQuestionBtn = root.querySelector(".prev-quiz-question");
     const nextQuestionBtn = root.querySelector(".next-quiz-question");
     const form = root.querySelector("form");
 
     startQuizBtn?.addEventListener("click", startQuiz);
+    options.forEach(option => { option.addEventListener("click", selectAnswer) });
     prevQuestionBtn?.addEventListener("click", previousQuestion);
     nextQuestionBtn?.addEventListener("click", nextQuestion);
     form?.addEventListener("submit", (e) => submitForm(e));
