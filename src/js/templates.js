@@ -1,5 +1,5 @@
 import { state } from "./state.js";
-import { questions } from "./questions.js";
+import { questions } from "../data/questions.js";
 import { STARS_ICON, GOLD_STARS_ICON, RIGHT_CHEVRON, LEFT_CHEVRON } from "../assets/icon.js"
 
 export function renderWelcome (){

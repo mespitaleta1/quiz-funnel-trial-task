@@ -1,25 +1,23 @@
-import { state } from "./state.js";
-
-export function trackQuizStep(step, questionId, answer) {
+export function trackQuizStep({ step,questionId,answer,answers}) {
     window.dataLayer = window.dataLayer || [];
     const payload = {
         event: `quiz_step_${step}`,
         step,
         question: questionId,
         answer,
-        answers: { ...state.answers }
+        answers
     };
 
     window.dataLayer.push(payload);
-    console.log("%cGTM EVENT", "color:green;font-weight:bold", payload);
+    console.log("%cGTM EVENT","color:green;font-weight:bold",payload);
 }
 
 export function trackLead(contact, answers) {
     const payload = {
         email: contact.email,
-        first_name: contact.firstName,
+        first_name: contact.name,
         phone: contact.phone,
-        ...answers
+        ...answers,
     };
 
     if (window.fbq) {

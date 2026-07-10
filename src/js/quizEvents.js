@@ -1,10 +1,10 @@
 import { state } from "./state.js";
 import { render } from "./render.js";
-import { questions } from "./questions.js";
-import { validateForm } from "./validations.js"
-import { saveState, clearState } from "./storage.js"
+import { questions } from "../data/questions.js";
+import { validateForm } from "../utils/validations.js"
+import { saveState, clearState } from "../services/storage.js"
 import { trackQuizStep, trackLead } from "./tracking.js"
-import { subscribeToKlaviyo } from "./klaviyo.js"
+import { subscribeToKlaviyo } from "../services/klaviyo.js"
 
 export const REDIRECT_URL = "https://ledisa.com/products/glp-1";
 

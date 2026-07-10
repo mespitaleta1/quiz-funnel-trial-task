@@ -1,4 +1,9 @@
 body {
+    margin: 0px;
+    color: #252525;
+    font-family: 'DM sans';
+}
+/*body {
     margin: 100px 0px 0px;
     color: #252525;
     font-family: 'DM sans';
@@ -189,4 +194,4 @@ input.error {
 
 .answer-error-msg {
     color: #328190;
-}
+}*/
